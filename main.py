@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-
-import os, sys, time, json
+import os, sys, json
 from dotenv import load_dotenv
 import paho.mqtt.client as mqtt
 import unicornhat
@@ -12,6 +11,8 @@ from actions import getSupportedActions
 load_dotenv()
 supportedActions = getSupportedActions()
 unicornhat.set_layout(unicornhat.AUTO)
+unicornhat.rotation(270)
+unicornhat.brightness(0.25)
 width, height = unicornhat.get_shape()
 
 #----------------------------------[ Callbacks ]----------------------------------#
@@ -22,7 +23,7 @@ def on_connect(client, userdata, flags, rc):
         print("Connected to MQTT server.")
         client.subscribe(os.getenv('MQTT_COMMAND_TOPIC'))
     else:
-        print("Unexpected MQTT connection code {}!".format(rc))
+        sys.exit("Unexpected MQTT connection code {}!".format(rc))
 
 # Callback for recieving a command message.
 def on_message(client, userdata, msg):
