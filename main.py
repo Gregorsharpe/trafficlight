@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
+import os, sys, time, json
 from dotenv import load_dotenv
 import paho.mqtt.client as mqtt
 import unicornhat
-import os, sys, time, json
 
+# Helper module contains all supported "actions" to be displayed.
 from actions import getSupportedActions
 
 #------------------------------------[ Init ]-------------------------------------#
