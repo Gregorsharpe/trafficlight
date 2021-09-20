@@ -2,10 +2,16 @@
 
 from dotenv import load_dotenv
 import paho.mqtt.client as mqtt
+import unicornhat
 import os, sys, time, json
 
-# Grab constants from .env file
+from actions import getSupportedActions
+
+#------------------------------------[ Init ]-------------------------------------#
 load_dotenv()
+supportedActions = getSupportedActions()
+unicornhat.set_layout(unicornhat.AUTO)
+width, height = unicornhat.get_shape()
 
 #----------------------------------[ Callbacks ]----------------------------------#
 
@@ -19,8 +25,13 @@ def on_connect(client, userdata, flags, rc):
 
 # Callback for recieving a command message.
 def on_message(client, userdata, msg):
-  message = json.loads(msg.payload)
-  print(message)
+    payload = json.loads(msg.payload)
+    action = payload["action"].lower()
+    if action in supportedActions:
+        supportedActions[action]()
+        print(F"Executed \"{action}\".")
+    else:
+        print(F"Got unknown instruction: \"{payload}\"")
 
 #----------------------------------[ Main Loop ]----------------------------------#
 
@@ -28,9 +39,12 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
+print(F"{width} x {height} grid detected!")
+print(F"Loaded {len(supportedActions)} supported actions.")
+
 try:
-  client.connect_async(os.getenv('MQTT_SERVER_ADDRESS'), int(os.getenv('MQTT_SERVER_PORT')), 60)
-  client.loop_forever()
+    client.connect_async(os.getenv('MQTT_SERVER_ADDRESS'), int(os.getenv('MQTT_SERVER_PORT')), 60)
+    client.loop_forever()
 except KeyboardInterrupt:
-  print("\nInterrupted, exiting gracefully.")
-  
+    print("\nInterrupted, exiting gracefully.")
+
