@@ -4,16 +4,16 @@ from dotenv import load_dotenv
 import paho.mqtt.client as mqtt
 import unicornhat
 
-# Helper module contains all supported "actions" to be displayed.
-from actions import getSupportedActions
-
 #------------------------------------[ Init ]-------------------------------------#
-load_dotenv()
-supportedActions = getSupportedActions()
 unicornhat.set_layout(unicornhat.AUTO)
 unicornhat.rotation(270)
 unicornhat.brightness(0.25)
+
+# Helper module contains all supported "actions" to be displayed.
+from actions import getSupportedActions
+supportedActions = getSupportedActions()
 width, height = unicornhat.get_shape()
+load_dotenv()
 
 #----------------------------------[ Callbacks ]----------------------------------#
 

@@ -12,31 +12,38 @@ def raindrop(colour):
     for y in range(height):
         if (y % 2 == 0):
             for x in range(width):
+                unicornhat.off()
                 unicornhat.set_pixel(x, y, colour)
                 unicornhat.show()
                 time.sleep(0.05)
         else:
             for x in range(width):
-                unicornhat.set_pixel(x, y, colour)
+                unicornhat.off()
+                unicornhat.set_pixel(width-1 - x, y, colour)
                 unicornhat.show()
                 time.sleep(0.05)
 
-def wipe(colour):
+def wipeUp(colour):
     for y in range(height):
         for x in range(width):
-            unicornhat.set_pixel(x, y, colour)
+            unicornhat.set_pixel(x, height-1 - y, colour)
         unicornhat.show()
         time.sleep(0.1)
 
-        
+def wipeDown(colour):
+    for y in range(height):
+        for x in range(width):
+            unicornhat.set_pixel(x, height-1 - y, colour)
+        unicornhat.show()
+        time.sleep(0.1)
 
 #-----------------------------------[ Actions ]-----------------------------------#
 def display_green():
     raindrop(GREEN)
-    wipe(GREEN)
+    wipeUp(GREEN)
 
 def display_off():
-    wipe(BLACK)
+    wipeDown(BLACK)
     unicornhat.off()
 
 #--------------------------------[ Action Lookup ]--------------------------------#
